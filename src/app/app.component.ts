@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   template: `
     <div class="container">
       <h1>Generer un mot de passe fort</h1>
@@ -9,14 +9,25 @@ import { Component } from '@angular/core';
       <div class="grid">
         <div>
           <h3>Votre futur mot de passe :</h3>
-          <article>Cliquer sur le bouton generer :</article>
+          <article>{{ message }}</article>
         </div>
         <div>
-          <label for="length">Longueur du mot de passe :</label>
-          <input type="range" min="10" max="50" name="length" />
+          <label for="length">Longueur du mot de passe : {{ length }}</label>
+          <!-- on passe $event dans cet Input car on va retrouver tout les elements du TARGET(range..) -->
+          <!-- au lieu du input on met change qui va permettre de faire la detection au relachement de la souris -->
+          <input
+            id="length"
+            type="range"
+            min="10"
+            max="50"
+            name="length"
+            (input)="onChangeLength($event)"
+          />
 
           <label>
+            <!-- detection du check avec $EVENT -->
             <input
+              (change)="onChangeUppercase($event)"
               role="switch"
               type="checkbox"
               name="uppercase"
@@ -25,6 +36,7 @@ import { Component } from '@angular/core';
           </label>
           <label>
             <input
+              (change)="addNumbers($event)"
               role="switch"
               type="checkbox"
               name="numbers"
@@ -33,6 +45,7 @@ import { Component } from '@angular/core';
           </label>
           <label>
             <input
+              (change)="addSpecialCaractere($event)"
               role="switch"
               type="checkbox"
               name="symbols"
@@ -40,7 +53,7 @@ import { Component } from '@angular/core';
             />Contiendra des caracteres speciaux
           </label>
           <hr />
-          <button>GENERER</button>
+          <button (click)="onClickGenerate()">GENERER</button>
         </div>
       </div>
     </div>
@@ -48,5 +61,40 @@ import { Component } from '@angular/core';
   styles: [],
 })
 export class AppComponent {
-  title = 'password-generator';
+  title = "password-generator";
+
+  message: string = 'cliquez sur le bouton "generer"';
+
+  length: number = 20;
+  uppercase: boolean = false;
+  numbers: boolean = false;
+  symbols: boolean = false;
+
+  onClickGenerate() {
+    this.message = "Mon mot de passe :";
+    console.table({
+      uppercase: this.uppercase,
+      symbols: this.symbols,
+      numbers: this.numbers,
+      length: this.length,
+    });
+  }
+  onChangeLength(event: Event) {
+    const element = event.target as HTMLInputElement;
+    //on ajoute ici le plus pour passer en number car ts declare en string
+    this.length = +element.value;
+  }
+
+  onChangeUppercase(event: Event) {
+    const element = event.target as HTMLInputElement;
+    this.uppercase = element.checked;
+  }
+  addNumbers(event: Event) {
+    const element = event.target as HTMLInputElement;
+    this.numbers = element.checked;
+  }
+  addSpecialCaractere(event: Event) {
+    const element = event.target as HTMLInputElement;
+    this.symbols = element.checked;
+  }
 }
