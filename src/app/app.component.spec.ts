@@ -4,6 +4,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { AppComponent } from "./app.component";
 import { Spectator, createComponentFactory } from "@ngneat/spectator";
+import { FormsModule } from "@angular/forms";
 
 describe("AppComponent (AVEC SPECTATOR", () => {
   let spectator: Spectator<AppComponent>;
@@ -12,45 +13,39 @@ describe("AppComponent (AVEC SPECTATOR", () => {
   const createComponent = createComponentFactory({
     component: AppComponent,
     declarations: [AppComponent],
+    imports: [FormsModule],
   });
   beforeEach(() => {
     spectator = createComponent();
     component = spectator.component;
   });
 
-  it("should work",() => {
-
+  it("should work", () => {
     const article = spectator.query("article");
     expect(article?.textContent).toBe('cliquez sur le bouton "generer"');
   });
   it("should change message when user click on generate button", async () => {
     //recuperation de la fixtures, creation du composant
 
-    
+    spectator.click("button");
 
-    spectator.click('button');
-
-    
-    expect(spectator.query('article')).toHaveText("Mon mot de passe :");
+    expect(spectator.query("article")).toHaveText("Mon mot de passe :");
   });
 
   it("Should update settings when user clicks on checkboxes ", () => {
     //recuperation de la fixture
 
-    spectator.click('#uppercase')
+    spectator.click("#uppercase");
     expect(component.uppercase).toBeTrue();
 
+    spectator.click("#numbers");
+    expect(component.numbers);
 
-    spectator.click('#numbers')
-    expect(component.numbers)
- 
-    spectator.click('#symbols')
-    expect(component.symbols)
+    spectator.click("#symbols");
+    expect(component.symbols);
 
-
-    spectator.typeInElement('33','#length');
-    expect(component.length).toBe(33)
-  
+    spectator.typeInElement("33", "#length");
+    expect(component.length).toBe(33);
   });
 });
 
@@ -64,6 +59,7 @@ describe("appComponent (AVEC TESTBED)", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AppComponent],
+      imports: [FormsModule],
     }).compileComponents();
     fixture = TestBed.createComponent(AppComponent);
   });
@@ -95,9 +91,9 @@ describe("appComponent (AVEC TESTBED)", () => {
     const button = fixture.nativeElement.querySelector("button");
     button.click();
     //penser a la detection de changement au clic
-
+    fixture.autoDetectChanges();
     const article = fixture.nativeElement.querySelector("article");
-    expect(article.textContent).toContain("Mon mot de passe :");
+    expect(article.textContent).toBe("Mon mot de passe :");
   });
 
   //checkbox detect changes

@@ -16,18 +16,19 @@ import { Component } from "@angular/core";
           <!-- on passe $event dans cet Input car on va retrouver tout les elements du TARGET(range..) -->
           <!-- au lieu du input on met change qui va permettre de faire la detection au relachement de la souris -->
           <input
+          [(ngModel)]="length"
             id="length"
             type="range"
             min="10"
             max="50"
             name="length"
-            (input)="onChangeLength($event)"
+            
           />
 
           <label>
             <!-- detection du check avec $EVENT -->
             <input
-              (change)="onChangeUppercase($event)"
+              [(ngModel)]="uppercase"
               role="switch"
               type="checkbox"
               name="uppercase"
@@ -36,7 +37,7 @@ import { Component } from "@angular/core";
           </label>
           <label>
             <input
-              (change)="addNumbers($event)"
+              [(ngModel)]="numbers"
               role="switch"
               type="checkbox"
               name="numbers"
@@ -45,7 +46,7 @@ import { Component } from "@angular/core";
           </label>
           <label>
             <input
-              (change)="addSpecialCaractere($event)"
+              [(ngModel)]="symbols"
               role="switch"
               type="checkbox"
               name="symbols"
@@ -79,11 +80,7 @@ export class AppComponent {
       length: this.length,
     });
   }
-  onChangeLength(event: Event) {
-    const element = event.target as HTMLInputElement;
-    //on ajoute ici le plus pour passer en number car ts declare en string
-    this.length = +element.value;
-  }
+
 
   onChangeUppercase(event: Event) {
     const element = event.target as HTMLInputElement;
